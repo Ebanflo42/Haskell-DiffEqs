@@ -3,7 +3,7 @@ module DiffEqs where
 import Data.List
 
 function :: (Floating a, Ord a) => a -> a -> a
-function x y = x*y
+function x y = x*x - y*y --place your function here, perhaps it will be taken as input in the future
 
 euler :: (Floating a, Ord a) => a -> (a -> a -> a) -> (a, a) -> (a, a)
 euler step f (x, y) = (x + step, y + step*(f x y))
@@ -26,8 +26,10 @@ loopRungeKutta step f init finX =
     else next:(loopRungeKutta step f next finX)
     where next = rungeKutta step f init
 
-doThing :: String -> IO ()
-doThing str =
+loop :: String -> IO ()
+loop str =
+  if head str == 'q' then return ()
+  else
   case read str :: Int of
     1 -> do
       putStrLn "Initial condition? Give your response in the form of an ordered pair."
@@ -55,5 +57,5 @@ doThing str =
 
 main :: IO ()
 main =
-  putStrLn "1 for first-order Runge-Kutta (Euler's method), 2 for second-order."
-    >> getLine >>= doThing
+  putStrLn "1 for first-order Runge-Kutta (Euler's method), 2 for second-order. \'q\' to quit."
+    >> getLine >>= loop
